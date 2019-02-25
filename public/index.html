@@ -1,0 +1,78 @@
+<html>
+<style>
+    body {
+        background-color: black;
+        color: aquamarine;
+    }
+</style>
+<head>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Hello there. <span style= "font-size: 50px; color: cyan">General Kenobi!</span></h1>
+    <br>
+    What grade are you in<select id = "grade">
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+    </select><br>
+    what is your name <input id = "nameIn" type = "text"/><br>
+    what is your student id <input id = "idIn" type - = "text"><br>
+    <button id="derp">Submit Your Answer</button>
+    <br>
+    <br>
+    <select id = "events">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+    <ul id="movies">
+    </ul>
+<script>
+    
+    axios.get('/movielist') 
+        .then(function (response) {
+        //console.log(response);
+        console.log(response.data);
+        
+    })
+    .catch(function (error) {
+        console.error(error);
+    })
+    
+    $("button").click(function(res) {
+        
+        axios.post('/answer',{
+            data:{
+            student:{
+                "name":$("#nameIn").val(),
+                "id":$("#idIn").val(),
+                "grade":$("#grade").val(),
+            },
+                events:{
+                "time":new Date(),
+                    "events":$("#events").val()
+                
+                
+            }
+            
+        }
+           
+        })
+        .then(function(response) {
+            
+            console.log(response);
+            
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    });
+</script>
+</body>
+</html>
+
