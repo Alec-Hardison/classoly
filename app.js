@@ -3,6 +3,7 @@ const fs = require('fs');
 const app = express();
 
 let students = [];
+let activities = [];
 
 fs.readFile('db.json', (err, data) => {
     students = JSON.parse(data);
@@ -34,7 +35,10 @@ function activity(teacher,room,amount) {
         }
     }
 
-
+let one =  new activity("teacher","a3",5);
+let two = new activity("teacher2","a4",3);
+activities.push(one);
+activities.push(two);
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -52,7 +56,10 @@ app.get('/movielist', (req, res) => {
 
 app.post('/answer',(req, res) => {
         students.push(req.body.data.student);
-       
+       if(req.body.data.student.activity ==1)
+           {
+               activities[0].add(req.body.data.student)
+           }
         fs.writeFile('db.json', JSON.stringify(students), (err) => {
         console.log(students);
         console.warn(err);
