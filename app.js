@@ -1,51 +1,92 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-
-let students = [];
-let activities = [];
+var act1;
+var act2;
+var students = [];
+var activities = [];
 
 fs.readFile('db.json', (err, data) => {
     students = JSON.parse(data);
 });
 
-function activity(teacher,room,amount) {
+
+function activity(teacher,room,max,description)
+{
     this.teacher = teacher;
     this.room = room;
-    this.amount = amount;
-    this.participants = [];
-    this.add= function(student) 
+    this.max = max;
+    this.description = description;
+}
+
+function student(name,grade,id)
+{
+    this.name = name;
+    this.ran = false;
+    this.grade = grade;
+    this.id = id;
+    this.challenge;
+    this.waitList;
+    this.add = function(activity)
     {
-        var grade = student.grade;
-        var count = 0;
-        for(var i = 0; i<this.participants.length;i++)
+        //console.log(students);
+        
+        let count = 0;
+         for(let i = 0; i<students.length;i++)
+             {
+                
+                 console.log( students[i].grade + " " +  this.grade);
+                 console.log( students[i].id + " " +  this.id);
+                 console.log( students[i].name + " "  +  this.name);
+                 if(students[i].grade == this.grade && students[i].name == this.name && students[i].id == this.id)
+                     {
+                         console.log("hi");
+                         console.log(students.splice(i,1));
+                     }
+             }
+        for(let i = 0; i<students.length;i++)
             {
                 
-                if(this.participants[i].grade == grade)
+                if(students[i].grade == this.grade && students[i].challenge == activity)
                     {
-                        
-                        count +=1;
+                        count += 1;
+                        console.log(count);
                     }
             }
-      
-        if(count<this.amount)
-            this.participants.push(student)
+        if(count<activity.max)
+            {
+                console.log("ran")
+                this.challenge = activity;
+                console.log(this)
+                students.push(this);
+                
+                return true;
+            }
         else
-            return null;
-        }
+            {
+               // console.log(this.name + " has been rejected");
+                if(!this.ran)
+                    {
+                        this.ran = true;
+                        this.waitlist = activity;
+                        this.add(act2)
+                    }
+                return false;
+                
+            }
     }
+}
 
-let one =  new activity("teacher","a3",5);
-let two = new activity("teacher2","a4",3);
-activities.push(one);
-activities.push(two);
+let one =  new activity("teacher","a3",5,"description");
+let two = new activity("teacher2","a4",3,"description2");
+
 
 app.use(express.static('public'));
 app.use(express.json());
 
 app.get('/',(req, res) => {
     
-    console.log(`IP address ${req.ip}`);
+    //console.log(`IP address ${req.ip}`);
     res.send(students);
     
 });
@@ -55,13 +96,12 @@ app.get('/movielist', (req, res) => {
 })
 
 app.post('/answer',(req, res) => {
-        students.push(req.body.data.student);
-       if(req.body.data.student.activity ==1)
-           {
-               activities[0].add(req.body.data.student)
-           }
+        let person = new student(req.body.data.student.name, req.body.data.student.grade, req.body.data.student.id);
+        act1 = one;
+        act2 = two;
+    person.add(act1);
         fs.writeFile('db.json', JSON.stringify(students), (err) => {
-        console.log(students);
+        //console.log(students);
         console.warn(err);
             
     });
@@ -73,3 +113,17 @@ app.post('/answer',(req, res) => {
 app.listen(3000, () => {
     console.log('Server started...');
 });
+
+
+function search(id)
+{
+    for(let i = 0;i<students.length;i++)
+        {
+            if(students[i].id == id)
+                {
+                    return students[i].name + students[i].challenge;
+                }
+        }
+}
+
+
