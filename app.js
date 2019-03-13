@@ -6,8 +6,9 @@ var act2;
 var students = [];
 var activities = [];
 
-fs.readFile('db.json', (err, data) => {
-    students = JSON.parse(data);
+fs.readFile('db.json', async (err, data) => {
+    students = await JSON.parse(data);
+   
 });
 
 
@@ -23,19 +24,16 @@ function student(name,grade,id)
 {
     this.name = name;
     this.ran = false;
-    this.isWaiting = true;
+    this.isWaiting = false;
     this.grade = grade;
     this.id = id;
     this.challenge;
     this.waitList;
-    this.add = function(activity,wait)
+    this.add = function(activity)
     {
         //console.log(students);
-        if(arguments.length ==2)
-            {
-            this.wait;
-            }
         let count = 0;
+
          for(let i = 0; i<students.length;i++)
              {
                 
@@ -63,7 +61,6 @@ function student(name,grade,id)
                 this.challenge = activity;
                 console.log(this)
                 students.push(this);
-                this.add(activity,wait);
                 return true;
             }
         else
@@ -74,55 +71,13 @@ function student(name,grade,id)
                         this.ran = true;
                         this.waitlist = activity;
                         this.add(act2)
+                        this.isWaiting = true;
                     }
                 return false;
                 
             }
     }
-    this.wait = function(act)
-    {
-        console.log("i'm loopy loo the wait list. line 82");
-        for(let i = 0; i<students.length;i++)
-            {
-                console.log(students[i].grade + " " + this.grade);
-                console.log( students[i].id + " " +  this.id);
-                console.log( students[i].name + " "  +  this.name);
-                if(students[i].grade == this.grade && students[i].name == this.name && students[i].id == this.id)
-                     {
-                         console.log("hi");
-                         console.log(students.splice(i,1));
-                     }
-            }
-        for(let i = 0; i<students.length;i++)
-            {
-                
-                if(students[i].grade == this.grade && students[i].waitlist == this.wait)
-                    {
-                        count += 1;
-                        console.log(count);
-                    }
-            }
-        if(count<activity.max)
-            {
-                console.log("ran")
-                this.challenge = this.wait;
-                this.wait = null;
-                console.log(this)
-                students.push(this);
-                
-                this.isWaiting = false;
-            }
-    
-    else
-            {
-               // console.log(this.name + " has been rejected");
-                
-                this.isWaiting = true;
-                
-            }
-    
-    
-    }
+   
 }
 
 let one =  new activity("teacher","a3",5,"description");
@@ -173,5 +128,3 @@ function search(id)
                 }
         }
 }
-
-
