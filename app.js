@@ -24,7 +24,7 @@ function student(name,grade,id)
 {
     this.name = name;
     this.ran = false;
-    this.isWaiting = false;
+    this.changing = false;
     this.grade = grade;
     this.id = id;
     this.challenge;
@@ -34,18 +34,7 @@ function student(name,grade,id)
         //console.log(students);
         let count = 0;
 
-         for(let i = 0; i<students.length;i++)
-             {
-                
-                 console.log( students[i].grade + " " +  this.grade);
-                 console.log( students[i].id + " " +  this.id);
-                 console.log( students[i].name + " "  +  this.name);
-                 if(students[i].grade == this.grade && students[i].name == this.name && students[i].id == this.id)
-                     {
-                         console.log("hi line 47");
-                         console.log(students.splice(i,1));
-                     }
-             }
+        
         for(let i = 0; i<students.length;i++)
             {
                 
@@ -61,6 +50,10 @@ function student(name,grade,id)
                 this.challenge = activity;
                 console.log(this)
                 students.push(this);
+                if(this.chnaging)
+                    {
+                        waitlist();
+                    }
                 return true;
             }
         else
@@ -88,7 +81,7 @@ app.use(express.static('public'));
 app.use(express.json());
 
 app.get('/',(req, res) => {
-    
+           
     //console.log(`IP address ${req.ip}`);
     res.send(students);
     
@@ -100,6 +93,7 @@ app.get('/movielist', (req, res) => {
 
 app.post('/answer',(req, res) => {
         let person = new student(req.body.data.student.name, req.body.data.student.grade, req.body.data.student.id);
+        check(person).add(act1)
         act1 = one;
         act2 = two;
     person.add(act1);
@@ -128,3 +122,58 @@ function search(id)
                 }
         }
 }
+
+
+function check(student) {
+    for(let i = 0; i<students.length; i++)
+        {
+            if(students[i].name == student.name && students[i].grade == student.grade && students[i].id == student.id )
+                {
+                    students[i].changing = true;
+                    return students[i];
+                }
+        }
+}
+
+function waitlist() {
+    for(let i = 0; i<students.length-1; i++)
+        {
+     let count = 0;
+        for(let j = i+1; i<students.length;i++)
+            {
+                
+                if(students[i].grade == students[j].grade && students[i].waitlist == students[j].waitlist)
+                    {
+                        count += 1;
+                        console.log(count);
+                    }
+            }
+        if(count<students[i].waitlist.max)
+            {
+                console.log("ran")
+                this.challenge = activity;
+                console.log(this)
+                students.push(this);
+                return true;
+            }
+        else
+            {
+               // console.log(this.name + " has been rejected");
+                if(!this.ran)
+                    {
+                        this.ran = true;
+                        this.waitlist = activity;
+                        this.add(act2)
+                        this.isWaiting = true;
+                    }
+                return false;
+                
+            }
+        }
+}
+
+
+
+
+
+
