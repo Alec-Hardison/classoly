@@ -10,7 +10,9 @@ fs.readFile('db.json', async (err, data) => {
     students = await JSON.parse(data);
    
 });
-
+fs.readFile('assignments.json', async (err,data) =>{
+    activities = await JSON.parse(data);
+});
 
 function activity(teacher,room,max,description)
 {
@@ -33,7 +35,7 @@ function student(name,grade,id)
     {
         //console.log(students);
         let count = 0;
-
+        console.log(activity);
         
         for(let i = 0; i<students.length;i++)
             {
@@ -90,13 +92,20 @@ app.get('/',(req, res) => {
 app.get('/movielist', (req, res) => {
     
 })
-
+app.post("/list",(req,res) =>
+        {
+    let person = req.body.student;
+    let event = [];
+    for(let i = 0; i< activities.length; i ++)
+        {
+           
+        }
+});
 app.post('/answer',(req, res) => {
         let person = new student(req.body.data.student.name, req.body.data.student.grade, req.body.data.student.id);
-        check(person).add(act1)
         act1 = one;
         act2 = two;
-    person.add(act1);
+        check(person).add(act1)
         fs.writeFile('db.json', JSON.stringify(students), (err) => {
         //console.log(students);
         console.warn(err);
@@ -130,9 +139,11 @@ function check(student) {
             if(students[i].name == student.name && students[i].grade == student.grade && students[i].id == student.id )
                 {
                     students[i].changing = true;
-                    return students[i];
+                    let [temp] = students.splice(i,1);
+                    return temp;
                 }
         }
+    return student;
 }
 
 function waitlist() {
@@ -151,7 +162,8 @@ function waitlist() {
         if(count<students[i].waitlist.max)
             {
                 console.log("ran")
-                this.challenge = activity;
+                students[i].challenge = students[i].waitList;
+                students[i].waitList;
                 console.log(this)
                 students.push(this);
                 return true;
@@ -159,13 +171,6 @@ function waitlist() {
         else
             {
                // console.log(this.name + " has been rejected");
-                if(!this.ran)
-                    {
-                        this.ran = true;
-                        this.waitlist = activity;
-                        this.add(act2)
-                        this.isWaiting = true;
-                    }
                 return false;
                 
             }
