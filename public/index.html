@@ -1,28 +1,25 @@
 <html>
-<style>
-    body {
-        background-color: black;
-        color: aquamarine;
-    }
-</style>
 <head>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel = "stylesheet" href = "Style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-    <h1>Hello there. <span style= "font-size: 50px; color: cyan">General Kenobi!</span></h1>
-    <br>
-    What grade are you in<select id = "grade">
+<body style= "text-align: center;">
+    <h1 style="text-align:center;">Hello there. <span style= "font-size: 50px; color: cyan;">General Kenobi!</span></h1>
+    What is your name? (First, Last): <input id = "nameIn" type = "text"/><br>
+    What is your Student ID?: <input id = "idIn" type = "text"><br>
+    What grade are you in?: <select id = "grade" >
         <option>9</option>
         <option>10</option>
         <option>11</option>
         <option>12</option>
-    </select><br>
-    what is your name <input id = "nameIn" type = "text"/><br>
-    what is your student id <input id = "idIn" type - = "text"><br>
+    </select><br><br>
+
     <button id="derp">Submit Your Answer</button>
     <br>
     <br>
+    
     <select id = "events">
         <option>1</option>
         <option>2</option>
@@ -32,8 +29,9 @@
     </select>
     <ul id="movies">
     </ul>
+    <br>
 <script>
-    
+    events = ["Bball","Overcrotch","Civ SIX","SMASH","Memes","Lightsaber Fighting(to the death)","Eradicating the Inferior Races","Creating the 10th Crusade","Taking Back the Holy Lands"];
     axios.get('/movielist') 
         .then(function (response) {
         //console.log(response);
@@ -43,7 +41,11 @@
     .catch(function (error) {
         console.error(error);
     })
-    
+    for (let i = 0; i < 9; i++) {
+        let button = $("<button></button>").attr("class","auto");
+        button.text(events[i]);
+        $("body").append(button);
+    };
     $("button").click(function(res) {
         
         axios.post('/answer',{
